@@ -7,12 +7,17 @@ import HomePage from './pages/HomePage.jsx';
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore.js';
+
+import { useThemeStore } from './store/useThemeStore.jsx';
+
 import { useEffect } from 'react';
 
 import { Loader } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
@@ -28,7 +33,7 @@ const App = () => {
     );
 
   return (
-    <div>
+    <div data-theme={theme}>
       <Navbar />
 
       <Routes>
@@ -38,7 +43,7 @@ const App = () => {
         />
         <Route
           path="/signup"
-          element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+          element={authUser ? <SignUpPage /> : <Navigate to="/" />}
         />
         <Route
           path="/login"
@@ -50,6 +55,8 @@ const App = () => {
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
         />
       </Routes>
+
+      <Toaster />
     </div>
   );
 };
